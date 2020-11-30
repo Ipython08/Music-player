@@ -14,7 +14,7 @@ win.resizable(width=False, height=False)
 win.iconbitmap(r"favicon.ico")
 
 pygame.mixer.init()
-# hello
+
 q = PhotoImage(file="PlayButton.png")
 t = PhotoImage(file="PauseButton.png")
 o = PhotoImage(file="Forward.png")
