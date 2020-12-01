@@ -54,11 +54,12 @@ q = PhotoImage(file="PlayButton.png")
 t = PhotoImage(file="PauseButton.png")
 o = PhotoImage(file="Forward.png")
 r = PhotoImage(file="Rewind.png")
+m=PhotoImage(file="Resume.png")
 
 def buttonpress(n):
     
     if n==1:
-        Button(win, image=t, borderwidth=0, command=lambda: buttonpress(2)).place(x=575, y=700)# Pause button
+        Button(win, image=t, borderwidth=0, command=lambda: buttonpress(2)).place(x=515.5, y=641)# Pause button
         # play/pause with pyaudio will come here
         pygame.mixer.init()
         pygame.mixer.music.load(file)
@@ -66,10 +67,10 @@ def buttonpress(n):
 
     if n==2:
                     
-        Button(win, image=q, borderwidth=0, command=lambda: buttonpress(3)).place(x=575, y=700)
+        Button(win, image=m, borderwidth=0, command=lambda: buttonpress(3)).place(x=515.5, y=641)
         pygame.mixer.music.pause()
     if n==3:
-        Button(win, image=t, borderwidth=0, command=lambda: buttonpress(2)).place(x=575, y=700)
+        Button(win, image=t, borderwidth=0, command=lambda: buttonpress(2)).place(x=515.5, y=641)
         pygame.mixer.music.unpause()
 
 def set_vol(val):
@@ -84,9 +85,10 @@ pygame.mixer.music.set_volume(0.7)
 scale.place(x=725,y=655)
 
 
-Button(win, image=q, borderwidth=0, command=lambda: buttonpress(1)).place(x=575, y=700)# Play button
-Button(win, image=o, borderwidth=0).place(x=634, y=700)
-Button(win, image=r, borderwidth=0, command=lambda: buttonpress(1)).place(x=516, y=700)
+Button(win, image=m, borderwidth=0, command=lambda: buttonpress(1)).place(x=515.5, y=641)# Play button
+Button(win, image=o, borderwidth=0).place(x=574.5, y=700)
+Button(win, image=q, borderwidth=0, command=lambda: buttonpress(1)).place(x=574.5, y=641)
+Button(win, image=r, borderwidth=0).place(x=516, y=700)
 
 
 win.mainloop()
