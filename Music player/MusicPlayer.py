@@ -53,3 +53,4 @@ Button(win, image=r, borderwidth=0, command=lambda: buttonpress(1)).place(x=516,
 
 
 win.mainloop()
+#random
