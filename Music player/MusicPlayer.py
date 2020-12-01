@@ -8,7 +8,7 @@ temp = TinyTag.get("Unforgettable lyrics - clean.mp3")
 
 win = Tk()
 win.title("Music Player")
-win["bg"] = "white"
+win["bg"] = "black" # I figured we have a black background
 win.geometry("1250x900")
 win.resizable(width=False, height=False)
 win.iconbitmap(r"favicon.ico")
