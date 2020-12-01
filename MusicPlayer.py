@@ -79,6 +79,6 @@ scale.place(x=725, y=655)
 
 Button(win, image=q, borderwidth=0, command=lambda: buttonpress(1)).place(x=1015, y=820)  # Play button
 Button(win, image=o, borderwidth=0).place(x=1075, y=820)
-Button(win, image=r, borderwidth=0, command=lambda: buttonpress(1)).place(x=955, y=820)
+Button(win, image=r, borderwidth=0, command=lambda: buttonpress(1)).place(x=955, y=820) # what is the problem with these values
 
 win.mainloop()
