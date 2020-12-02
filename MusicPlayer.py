@@ -55,7 +55,7 @@ subMenu = Menu(menubar, tearoff=0)
 menubar.add_cascade(label="Help", menu=subMenu)
 subMenu.add_command(label="About Us", command=about)
 
-List1 = Listbox(win, bg="dark grey", fg="black", width=60)
+List1 = Listbox(win, bg="dark grey", fg="black", width=60) # Listbox creation here
 List1.place(x=60, y=60)
 List1.insert(END, "Google.wav")
 current=List1.get(0)
