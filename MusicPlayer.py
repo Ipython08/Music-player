@@ -1,26 +1,19 @@
 from tkinter import *
-from tkinter import filedialog
 from tkinter import ttk
 import pygame
-from mutagen.mp3 import MP3
+from tkinter import filedialog
+import os
+from tinytag import TinyTag
+from PIL import ImageTk, Image
 
-audio = MP3(
-    "C:/1 Files and Folders/SHARAN/Python/SVE atom/Code/Music-player-main/Music player/Undertale - Megalovania.mp3")
-# print(int(audio.info.length))
-a = 0
-
-x = 0
 win = Tk()
-win.title("Music Player")
-win["bg"] = "white"
-win.geometry("1250x900")
+win.geometry("500x300")
 win.resizable(width=False, height=False)
-win.iconbitmap("favicon.ico")
-
-pygame.mixer.init()
-
+win.title("Vinyl Music Player")
+win["bg"] = "White"
 menubar = Menu(win)
 win.config(menu=menubar)
+pygame.mixer.init()
 
 
 class Popup(Toplevel):
@@ -38,79 +31,127 @@ class Popup(Toplevel):
         self.master.wait_window(self)
 
 
-def light():
-    win["bg"] = "white"
-
-
-def dark():
-    win["bg"] = "#3E3D3D"
-
-
-# Create the submenu
-
 def about():
     Popup("About Music Player", "Powered By Python \n Version 1.1")
 
 
-def openfile():
-    global file
-    file = filedialog.askopenfilename()
-    List1.insert(END, file)
+def set_vol(val):
+    volume = int(val) / 100
+    pygame.mixer.music.set_volume(volume)
 
+
+def dark():
+    win["bg"] = "Black"
+    Label(win, text="Dark Mode \t \t \t \t \t \t \t \t \t \t \t \t", bd=1, relief=SUNKEN, anchor=W).place(x=0, y=280)
+
+
+def white():
+    win["bg"] = "White"
+    Label(win, text="Light mode \t \t \t \t \t \t \t \t \t \t \t \t", bd=1, relief=SUNKEN, anchor=W).place(x=0, y=280)
+
+
+def open_():
+    global w, img, rp
+    global r
+    global k
+    w = filedialog.askopenfilename()
+    k = TinyTag.get(w)
+    gr = k.title
+    pl = os.path.basename(w)
+    rp = w.strip(pl)
+    win.update()
+    win.update_idletasks()
+    pygame.mixer.init()
+    Button(win, image=q, borderwidth=0, command=main_play).place(x=20, y=20)
+    Label(win, text=gr + "\t \t \t \t \t \t \t \t \t", bd=1, relief=SUNKEN,
+          anchor=W).place(x=0, y=280)
+    list1.insert(END, pl)
+    try:
+        img = Image.open(rp+"cover.jpg")
+
+        # resize the image and apply a high-quality down sampling filter
+        img = img.resize((110, 110), Image.ANTIALIAS)
+
+        # PhotoImage class is used to add image to widgets, icons etc
+        img = ImageTk.PhotoImage(img)
+
+        # create a label
+        panel = Label(win, image=img)
+
+        # set the image as img
+        panel.image = img
+        panel.place(x=35, y=160)
+    except FileNotFoundError:
+        ko = Image.open("Vinyl.jpg")
+
+        # resize the image and apply a high-quality down sampling filter
+        ko = ko.resize((110, 110), Image.ANTIALIAS)
+
+        # PhotoImage class is used to add image to widgets, icons etc
+        ko = ImageTk.PhotoImage(ko)
+
+        # create a label
+        kok = Label(win, image=ko)
+
+        # set the image as img
+        kok.image = ko
+        kok.place(x=35, y=160)
+
+
+def play():
+    pygame.mixer.music.unpause()
+    win.update()
+    win.update_idletasks()
+
+
+def pause():
+    pygame.mixer.music.pause()
+    win.update()
+    win.update_idletasks()
+
+
+def main_play():
+    wer = rp+list1.get(END)
+    pygame.mixer.init()
+    pygame.mixer.music.load(wer)
+    pygame.mixer.music.play()
+    Button(win, image=q, borderwidth=0, command=play).place(x=20, y=20)
+    win.update()
+    win.update_idletasks()
+
+
+q = PhotoImage(file="PlayButton.png")
+t = PhotoImage(file="PauseButton.png")
+o = PhotoImage(file="Forward.png")
+p = PhotoImage(file="Rewind.png")
 
 subMenu = Menu(menubar, tearoff=0)
 menubar.add_cascade(label="File", menu=subMenu)
-subMenu.add_command(label="Open", command=openfile)
+subMenu.add_command(label="Open", command=open_)
 subMenu.add_command(label="Exit", command=win.destroy)
 
 subMenu = Menu(menubar, tearoff=0)
-menubar.add_cascade(label="Theme", menu=subMenu)
-subMenu.add_command(label="Light", command=light)
+menubar.add_cascade(label="Modes", menu=subMenu)
+subMenu.add_command(label="Light", command=white)
 subMenu.add_command(label="Dark", command=dark)
 
 subMenu = Menu(menubar, tearoff=0)
 menubar.add_cascade(label="Help", menu=subMenu)
 subMenu.add_command(label="About Us", command=about)
 
-List1 = Listbox(win, bg="dark grey", fg="black", width=60)  # Listbox creation here
-List1.place(x=60, y=60)
+statusbar = Label(win, text="Open an audio file... \t \t \t \t \t \t \t \t \t \t \t \t", bd=1, relief=SUNKEN, anchor=W)
+statusbar.place(x=0, y=280)
 
-q = PhotoImage(file="PlayButton.png")
-t = PhotoImage(file="PauseButton.png")
-o = PhotoImage(file="Forward.png")
-r = PhotoImage(file="Rewind.png")
-
-
-def buttonpress(n):
-    if n == 1:
-        Button(win, image=t, borderwidth=0, command=lambda: buttonpress(2)).place(x=575, y=700)  # Pause button
-        # play/pause with pyaudio will come here
-        current = List1.get(0)
-        pygame.mixer.init()
-        pygame.mixer.music.load(current)
-        pygame.mixer.music.play(loops=0)
-        Button(win, image=r, borderwidth=0, command=lambda: buttonpress(808)).place(x=516, y=700)
-    if n == 2:
-        Button(win, image=q, borderwidth=0, command=lambda: buttonpress(3)).place(x=575, y=700)
-        pygame.mixer.music.pause()
-    if n == 3:
-        Button(win, image=t, borderwidth=0, command=lambda: buttonpress(2)).place(x=575, y=700)
-        pygame.mixer.music.unpause()
-
-
-def set_vol(val):
-    volume = int(val) / 100
-    pygame.mixer.music.set_volume(volume)
-    # set_volume of mixer takes value only from 0 to 1. Example - 0, 0.1,0.55,0.54.0.99,1
-
-
-scale = Scale(from_=100, to=0, orient=VERTICAL, command=set_vol)
+scale = Scale(from_=0, to=100, orient=HORIZONTAL, command=set_vol)
 scale.set(50)
 pygame.mixer.music.set_volume(0.7)
-scale.place(x=725, y=655)
+scale.place(x=35, y=90)
 
-Button(win, image=q, borderwidth=0, command=lambda: buttonpress(1)).place(x=575, y=700)  # Play button
-Button(win, image=o, borderwidth=0, command=lambda: buttonpress(x + 4)).place(x=634, y=700)
-Button(win, image=r, borderwidth=0, command=lambda: buttonpress(808)).place(x=516, y=700)
+list1 = Listbox(win, bg="dark grey", fg="black", width=40)
+list1.place(x=210, y=10)
+
+Button(win, image=q, borderwidth=0, command=main_play).place(x=20, y=20)
+Button(win, image=t, borderwidth=0, command=pause).place(x=100, y=20)
 
 win.mainloop()
+
